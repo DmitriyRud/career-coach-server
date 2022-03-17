@@ -24,17 +24,17 @@ module.exports = {
       salary: {
         type: Sequelize.STRING
       },
-      web_site_id: {
+      website_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      report_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'WebSites'},
+        onDelete: 'CASCADE',
       },
       user_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Users'},
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,

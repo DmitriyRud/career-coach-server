@@ -8,13 +8,21 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      skill_name: {
+      skill_id: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: { model: 'Skills' },
+        onDelete: 'CASCADE'
       },
       count: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      result_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Results' },
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

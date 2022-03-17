@@ -10,11 +10,15 @@ module.exports = {
       },
       user_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Users'},
+        onDelete: 'CASCADE',
       },
-      report_id: {
+      result_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Results'},
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,

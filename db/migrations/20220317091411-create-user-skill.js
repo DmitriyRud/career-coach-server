@@ -10,11 +10,15 @@ module.exports = {
       },
       user_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Users'},
+        onDelete: 'CASCADE',
       },
       skill_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Skills'},
+        onDelete: 'CASCADE',
       },
       rate: {
         type: Sequelize.INTEGER
