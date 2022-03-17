@@ -10,7 +10,8 @@ module.exports = {
       },
       name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       password: {
         allowNull: false,
@@ -19,10 +20,10 @@ module.exports = {
       email: {
         allowNull: false,
         type: Sequelize.STRING,
-        validate: { isEmail: true }
+        validate: { isEmail: true },
+        unique: true
       },
       fio: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       avatar: {
