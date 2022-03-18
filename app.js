@@ -10,6 +10,7 @@ require('dotenv').config();
 
 const authRouter = require('./src/routes/auth.router');
 const userRouter = require('./src/routes/users.router');
+const helperRouter = require('./src/routes/helper.router');
 
 const app = express();
 const { COOKIE_SECRET, COOKIE_NAME } = process.env;
@@ -49,6 +50,7 @@ app.use(
 // APP'S ROUTES
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/helper', helperRouter);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Start server to PORT = ${PORT}`))
