@@ -6,18 +6,15 @@ const signUp = async (req, res) => {
 
   if (name && password && email) {
     try {
-      console.log('Start');
       const newUser = await User.create({
         name,
         password,
         email,
       });
-      console.log('NewUser', newUser);
       req.session.user = {
         id: newUser.id,
         name: newUser.name,
       };
-      console.log('session complit');
       return res.json({ id: newUser.id, name: newUser.name, email: newUser.email, fio: newUser.fio, avatar: newUser.avatar });
     } catch (error) {
       return res.sendStatus(500);
