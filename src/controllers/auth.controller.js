@@ -2,6 +2,7 @@ const { User } = require('../../db/models');
 
 const signUp = async (req, res) => {
   const { name, password, email } = req.body;
+  console.log({password, name, email});
   
 
   if (name && password && email) {
@@ -69,9 +70,19 @@ const checkAuth = async (req, res) => {
   }
 };
 
+const checkIfLoggedIn = async (req, res) => {
+  if (req.session.user.id) {
+    const currentUser = await User.findByPk(req.session.user.id);
+    return res.json({ id: currentUser.id, name: currentUser.name, email: currentUser.email, fio: currentUser.fio, avatar: currentUser.avatar });
+  } else {
+    return res.json({});
+  }
+}
+
 module.exports = {
   signIn,
   signOut,
   signUp,
   checkAuth,
+  checkIfLoggedIn,
 };
