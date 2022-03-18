@@ -2,22 +2,20 @@ const { User } = require('../../db/models');
 
 const signUp = async (req, res) => {
   const { name, password, email } = req.body;
+  console.log({password, name, email});
   
 
   if (name && password && email) {
     try {
-      console.log('Start');
       const newUser = await User.create({
         name,
         password,
         email,
       });
-      console.log('NewUser', newUser);
       req.session.user = {
         id: newUser.id,
         name: newUser.name,
       };
-      console.log('session complit');
       return res.json({ id: newUser.id, name: newUser.name, email: newUser.email, fio: newUser.fio, avatar: newUser.avatar });
     } catch (error) {
       return res.sendStatus(500);
@@ -69,9 +67,19 @@ const checkAuth = async (req, res) => {
   }
 };
 
+const checkIfLoggedIn = async (req, res) => {
+  if (req.session.user.id) {
+    const currentUser = await User.findByPk(req.session.user.id);
+    return res.json({ id: currentUser.id, name: currentUser.name, email: currentUser.email, fio: currentUser.fio, avatar: currentUser.avatar });
+  } else {
+    return res.json({});
+  }
+}
+
 module.exports = {
   signIn,
   signOut,
   signUp,
   checkAuth,
+  checkIfLoggedIn,
 };
