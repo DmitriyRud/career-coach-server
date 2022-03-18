@@ -9,6 +9,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const authRouter = require('./src/routes/auth.router');
+const userRouter = require('./src/routes/user.router');
 
 const app = express();
 const { COOKIE_SECRET, COOKIE_NAME } = process.env;
@@ -47,6 +48,7 @@ app.use(
 
 // APP'S ROUTES
 app.use('/auth', authRouter);
+app.use('/profile', userRouter)
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Start server to PORT = ${PORT}`))
