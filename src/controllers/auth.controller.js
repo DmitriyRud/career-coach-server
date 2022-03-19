@@ -2,8 +2,6 @@ const { User } = require('../../db/models');
 
 const signUp = async (req, res) => {
   const { name, password, email } = req.body;
-  console.log({password, name, email});
-  
 
   if (name && password && email) {
     try {
