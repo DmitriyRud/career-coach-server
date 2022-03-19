@@ -1,31 +1,99 @@
-const { User, Skills, UserSkill } = require("../../db/models");
+const { User, Skills, UserSkill, UserPlans } = require("../../db/models");
 
-//Добавление скилов в таблицы "User, Skills, UserSkill" если они не добавленны 
-const newUserSkill = async (req, res) => {
-  const { input, id } = req.body.skill;
-  if (!input) {
-    return res.sendStatus(418);
+//Вывод всех скиллов юзера из Skills
+const allUserSkillsFromSkills = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const allSkilsForSkills = await UserSkill.findAll({
+      where: { user_id: +id },
+      include: Skills,
+      order: [["createdAt", "DESC"]],
+    });
+
+    return res.json(allSkilsForSkills);
+  } catch (error) {
+    res.sendStatus(418);
   }
-
-  const checkOrCreateSkill = await Skills.findOrCreate({
-    where: { skill: input },
-    defaults: {
-      skill: input,
-    },
-  });
-
-  const skillId = checkOrCreateSkill[0].dataValues.id;
-  const userSkill = await UserSkill.findOrCreate({
-    where: { user_id: id, skill_id: +skillId },
-    defaults: {
-      user_id: +id,
-      skill_id: +skillId,
-    },
-  });
-
-  return res.json(checkOrCreateSkill[0].dataValues.skill);
 };
 
+//Вывод всех скиллов юзера из Learn
+const allUserSkillsFromLearn = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const allSkilsForLearn = await UserPlans.findAll({
+      where: { user_id: +id },
+      include: Skills,
+      order: [['createdAt', 'DESC']],
+    });
+    // console.log('================'allSkilsForLearn);
+    return res.json(allSkilsForLearn);
+  } catch (error) {
+    res.sendStatus(418);
+  }
+};
+
+//Добавление скилов в таблицы "User, Skills, UserPlans" если они не добавленны
+const newUserSkillLearn = async (req, res) => {
+  try {
+    const { input, id } = req.body.skill;
+    if (!input) {
+      return res.sendStatus(418);
+    }
+
+    const checkOrCreateSkill = await Skills.findOrCreate({
+      where: { skill: input },
+      defaults: {
+        skill: input,
+      },
+    });
+
+    const skillId = checkOrCreateSkill[0].dataValues.id;
+    const userSkill = await UserPlans.findOrCreate({
+      where: { user_id: id, skill_id: +skillId },
+      defaults: {
+        user_id: +id,
+        skill_id: +skillId,
+      },
+    });
+
+    return res.json(checkOrCreateSkill[0].dataValues.skill);
+  } catch (error) {
+    res.sendStatus(418);
+  }
+};
+
+//Добавление скилов в таблицы "User, Skills, UserSkill" если они не добавленны
+const newUserSkillSkill = async (req, res) => {
+  try {
+    const { input, id } = req.body.skill;
+    if (!input) {
+      return res.sendStatus(418);
+    }
+
+    const checkOrCreateSkill = await Skills.findOrCreate({
+      where: { skill: input },
+      defaults: {
+        skill: input,
+      },
+    });
+
+    const skillId = checkOrCreateSkill[0].dataValues.id;
+    const userSkill = await UserSkill.findOrCreate({
+      where: { user_id: id, skill_id: +skillId },
+      defaults: {
+        user_id: +id,
+        skill_id: +skillId,
+      },
+    });
+
+    return res.json(checkOrCreateSkill[0].dataValues.skill);
+  } catch (error) {
+    res.sendStatus(418);
+  }
+};
+
+//Удаление скилов юзера будет здесь
+//-----------------------
 const updateUser = async (req, res) => {
   const { id, name, password, email, fio } = req.body;
 
@@ -64,5 +132,8 @@ const updateUser = async (req, res) => {
 
 module.exports = {
   updateUser,
-  newUserSkill,
+  newUserSkillSkill,
+  newUserSkillLearn,
+  allUserSkillsFromSkills,
+  allUserSkillsFromLearn,
 };
