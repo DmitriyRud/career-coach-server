@@ -1,5 +1,6 @@
 const { User } = require('../../db/models');
 const axios = require('axios');
+require('dotenv').config();
 
 
 const apiHH = async (req, res) => {
@@ -11,7 +12,7 @@ const apiHH = async (req, res) => {
     headers: {
       // 'User-Agent': 'api-test-agent',
       'User-Agent': 'CareerCoach (cska2004@gmail.com)',
-      'Authorization': 'Bearer RM1KOOF087Q6RQU6955O05TSTGKD0BVS42VNHP1MBGIH705VS1NQBSBJ5C2761CN',
+      'Authorization': `Bearer ${process.env.API_KEY}`,
     },
   }
   );
@@ -21,7 +22,7 @@ const apiHH = async (req, res) => {
   //   headers: {
   //     'Content-Type': 'application/x-www-form-urlencoded ',
   //   },
-  //   data: 'grant_type=client_credentials&client_id=V1DRFKEBUA2GKI06N4CGLILS3FJ2P2U2ES2QHNE5JR87HLOQESP2LR1L23V0BB9G&client_secret=T1QO58QPRRVDRB6JV7U5MBQUFOV14K773MPU8JKU95UFADJT07D1L6UIE7V4TBN7',
+  //   data: 'grant_type=client_credentials&client_id=${process.env.API_CLIENT_ID}&client_secret=${process.env.API_CLIENT_SECRET}',
 
   // });
   //console.log(response.data.items);
@@ -34,7 +35,7 @@ const apiHH = async (req, res) => {
     headers: {
       // 'User-Agent': 'api-test-agent',
       'User-Agent': 'CareerCoach (cska2004@gmail.com)',
-      'Authorization': 'Bearer RM1KOOF087Q6RQU6955O05TSTGKD0BVS42VNHP1MBGIH705VS1NQBSBJ5C2761CN',
+      'Authorization': `Bearer ${process.env.API_KEY}`,
     },
   });
     console.log(oneVacancy.data.name);
