@@ -13,6 +13,34 @@ const getOneResult = async (req, res) => {
         salary: response.salary,
         createdAt: response.createdAt,
       };
+      // console.log(answer);
+    return res.json(answer)
+  } catch (error) {
+    return res.sendStatus(500)
+  }
+}
+
+const getUserAllResult = async (req, res) => {
+  const { id } = req.params;
+  // id = user_id
+  try {
+    const response = await Result.findAll({ where: { user_id: id }, raw: true, include: WebSite });
+    // console.log('getUserAllResult >>>> >>>>  ', response);
+    const answer = response.map((el) => {
+      return (
+        {
+          id: el.id,
+          search_string: el.search_string,
+          web_site: el['WebSite.name'],
+          count_vacancy: el.count_vacancy,
+          period: el.period,
+          city: el.city,
+          salary: el.salary,
+          createdAt: el.createdAt,
+        }
+      )
+    });
+      // console.log(answer);
     return res.json(answer)
   } catch (error) {
     return res.sendStatus(500)
@@ -107,7 +135,7 @@ const addSkillMyPlans = async (req, res) => {
 const getRecomendation = async (req, res) => {
   const { id } = req.params;
   // id это result_id
-  console.log(id);
+  // console.log(id);
   // TODO сделать логику по рекомендациям, использовать текущие скилы пользователя
 
   // заглушка, пока нет логики для сбора массива
@@ -121,5 +149,6 @@ module.exports = {
   addSkillBlackList,
   addUserSkill,
   addSkillMyPlans,
-  getRecomendation
+  getRecomendation,
+  getUserAllResult
 }
