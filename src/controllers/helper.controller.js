@@ -8,7 +8,7 @@ const getOneResult = async (req, res) => {
         search_string: response.search_string,
         web_site: response['WebSite.name'],
         count_vacancy: response.count_vacancy,
-        period: response.period, // в секундах, Дима знает как положить их правильно
+        period: response.period,
         city: response.city,
         salary: response.salary,
         createdAt: response.createdAt,

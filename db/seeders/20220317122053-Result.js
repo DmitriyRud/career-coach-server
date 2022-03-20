@@ -6,7 +6,7 @@ module.exports = {
     await queryInterface.bulkInsert('Results', [{
       search_string: 'Junior JavaScript',
       count_vacancy: 400,
-      period: 86400,
+      period: 1,
       website_id: 1,
       user_id: 1,
       createdAt: new Date(),
