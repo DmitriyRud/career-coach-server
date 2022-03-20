@@ -4,8 +4,8 @@ const helperController = require('../controllers/helper.controller');
 const helperRouter = Router();
 
 helperRouter.get('/result/:id', helperController.getOneResult);
-
 helperRouter.get('/report/:id', helperController.getOneReport);
+helperRouter.get('/recomendation/:id', helperController.getRecomendation);
 
 helperRouter.post('/whitelist', helperController.addSkillWhiteList)
 helperRouter.post('/blacklist', helperController.addSkillBlackList)

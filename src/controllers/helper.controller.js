@@ -8,7 +8,7 @@ const getOneResult = async (req, res) => {
         search_string: response.search_string,
         web_site: response['WebSite.name'],
         count_vacancy: response.count_vacancy,
-        period: response.period, // в секундах, Дима знает как положить их правильно
+        period: response.period,
         city: response.city,
         salary: response.salary,
         createdAt: response.createdAt,
@@ -104,6 +104,15 @@ const addSkillMyPlans = async (req, res) => {
   }
 }
 
+const getRecomendation = async (req, res) => {
+  const { id } = req.params;
+  // id это result_id
+  console.log(id);
+  // TODO сделать логику по рекомендациям, использовать текущие скилы пользователя
+
+  // заглушка, пока нет логики для сбора массива
+  res.json(['React', 'NodeJS', 'TypeScript'])
+}
 
 module.exports = {
   getOneResult,
@@ -111,5 +120,6 @@ module.exports = {
   addSkillWhiteList,
   addSkillBlackList,
   addUserSkill,
-  addSkillMyPlans
+  addSkillMyPlans,
+  getRecomendation
 }
