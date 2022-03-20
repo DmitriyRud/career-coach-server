@@ -23,9 +23,9 @@ const allUserSkillsFromLearn = async (req, res) => {
     const allSkilsForLearn = await UserPlans.findAll({
       where: { user_id: +id },
       include: Skills,
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
     });
-    // console.log('================'allSkilsForLearn);
+    console.log("================", allSkilsForLearn[0].dataValues);
     return res.json(allSkilsForLearn);
   } catch (error) {
     res.sendStatus(418);
@@ -47,6 +47,10 @@ const newUserSkillLearn = async (req, res) => {
       },
     });
 
+    if (checkOrCreateSkill) {
+      const response = await Skills;
+    }
+
     const skillId = checkOrCreateSkill[0].dataValues.id;
     const userSkill = await UserPlans.findOrCreate({
       where: { user_id: id, skill_id: +skillId },
@@ -56,6 +60,7 @@ const newUserSkillLearn = async (req, res) => {
       },
     });
 
+    // console.log(checkOrCreateSkill[0].dataValues);
     return res.json(checkOrCreateSkill[0].dataValues.skill);
   } catch (error) {
     res.sendStatus(418);
@@ -92,8 +97,36 @@ const newUserSkillSkill = async (req, res) => {
   }
 };
 
-//Удаление скилов юзера будет здесь
-//-----------------------
+//Удаление скилов юзера из skills
+const deleteUserSkillFromSkill = async (req, res) => {
+  try {
+    const { user_id, skill_id } = req.body;
+    const deleteSkill = await UserSkill.destroy({
+      where: { user_id, skill_id },
+    });
+    if (deleteSkill) {
+      res.status(202).json(skill_id);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+//Удаление скилов юзера из Learn(Plans)
+const deleteUserSkillFromLearn = async (req, res) => {
+  try {
+    const { user_id, skill_id } = req.body;
+    const deleteLearn = await UserPlans.destroy({
+      where: { user_id, skill_id },
+    });
+    if (deleteLearn) {
+      res.status(202).json(skill_id);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
 const updateUser = async (req, res) => {
   const { id, name, password, email, fio } = req.body;
 
@@ -134,6 +167,8 @@ module.exports = {
   updateUser,
   newUserSkillSkill,
   newUserSkillLearn,
+  deleteUserSkillFromSkill,
+  deleteUserSkillFromLearn,
   allUserSkillsFromSkills,
   allUserSkillsFromLearn,
 };
