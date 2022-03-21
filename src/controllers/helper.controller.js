@@ -142,6 +142,17 @@ const getRecomendation = async (req, res) => {
   res.json(['React', 'NodeJS', 'TypeScript'])
 }
 
+const getVacanciesUser = async (req, res) => {
+  const { id } = req.params;
+  console.log('getVacanciesUser id_user >>> ', id);
+  // заглушка
+  res.json([{
+    title: 'Middle/Senior JavaScript Developer (Мальта, Сент-Джулианс)',
+    company: 'Alex Staff Agency',
+    url: 'https://hh.ru/vacancy/51990194?from=vacancy_search_list&hhtmFrom=vacancy_search_list&query=Junior%20javascript',
+  }])
+}
+
 module.exports = {
   getOneResult,
   getOneReport,
@@ -150,5 +161,6 @@ module.exports = {
   addUserSkill,
   addSkillMyPlans,
   getRecomendation,
-  getUserAllResult
+  getUserAllResult,
+  getVacanciesUser
 }

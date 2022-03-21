@@ -7,6 +7,7 @@ helperRouter.get('/result/:id', helperController.getOneResult);
 helperRouter.get('/result/user/:id', helperController.getUserAllResult);
 helperRouter.get('/report/:id', helperController.getOneReport);
 helperRouter.get('/recomendation/:id', helperController.getRecomendation);
+helperRouter.get('/vacancies/:id', helperController.getVacanciesUser);
 
 helperRouter.post('/whitelist', helperController.addSkillWhiteList)
 helperRouter.post('/blacklist', helperController.addSkillBlackList)
