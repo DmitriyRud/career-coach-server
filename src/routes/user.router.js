@@ -12,9 +12,9 @@ userRouter.get('/allUserSkillsFromSkills/:id', userController.allUserSkillsFromS
 
 
 //deleteSkill
-// userRouter.post('/adduserskill', userController.---- )
+userRouter.delete('/deleteuserskill', userController.deleteUserSkillFromSkill )
 //deleteLearn
-// userRouter.post('/adduserskill', userController.---- )
+userRouter.delete('/deleteuserlearn', userController.deleteUserSkillFromLearn)
 
 //editSkill если время будет
 // userRouter.post('/adduserskill', userController.newUserSkill )
