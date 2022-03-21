@@ -47,9 +47,9 @@ const newUserSkillLearn = async (req, res) => {
       },
     });
 
-    if (checkOrCreateSkill) {
-      const response = await Skills;
-    }
+    // if (checkOrCreateSkill) {
+    //   const response = await Skills;
+    // }
 
     const skillId = checkOrCreateSkill[0].dataValues.id;
     const userSkill = await UserPlans.findOrCreate({
@@ -60,8 +60,8 @@ const newUserSkillLearn = async (req, res) => {
       },
     });
 
-    // console.log(checkOrCreateSkill[0].dataValues);
-    return res.json(checkOrCreateSkill[0].dataValues.skill);
+    console.log(checkOrCreateSkill[0]);
+    return res.json(checkOrCreateSkill[0]);
   } catch (error) {
     res.sendStatus(418);
   }
@@ -90,8 +90,8 @@ const newUserSkillSkill = async (req, res) => {
         skill_id: +skillId,
       },
     });
-
-    return res.json(checkOrCreateSkill[0].dataValues.skill);
+   console.log(checkOrCreateSkill[0])
+    return res.json(checkOrCreateSkill[0]);
   } catch (error) {
     res.sendStatus(418);
   }
