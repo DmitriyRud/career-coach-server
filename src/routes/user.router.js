@@ -1,6 +1,10 @@
 const userRouter = require('express').Router()
 const userController = require('../controllers/user.controller')
 
+//Вывод скилов из Skills  в компонент SelectSkills
+userRouter.get('/allskillsforskillsselect', userController.allSkillsForSelectSkills )
+
+
 
 //ДЛя learn 
 userRouter.post('/adduserskilllearn', userController.newUserSkillLearn )
