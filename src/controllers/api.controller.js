@@ -1,24 +1,25 @@
-const { User } = require('../../db/models');
+const { Result, Report, Skills } = require('../../db/models');
 const axios = require('axios');
 require('dotenv').config();
 
 
 const apiHH = async (req, res) => {
-  let { title, amount, days, city=113, salary } = req.body;
+  let { title, amount, period, city = 'Россия', salary, websites } = req.body;
   const skillsObj = {};
 
 
-  console.log({ title, amount, days, city, salary });
-  const period = (days > 30)? 30 : +days;
+  console.log({ title, amount, period, city, salary });
+  period = (period > 30) ? 30 : +period;
 
   if (amount > 1999) amount = 1999; // Убрать эту строку, когда сделаем логику поиска более 2000 вакансий (ограничение API hh.ru)
 
   let pages = 1;
   if (amount > 100) {
-    pages = -~(amount/100);
+    pages = -~(amount / 100);
   }
+
   //console.log({amount, pages});
-  
+
   // Получение токена - нужно только один раз или если токен был заблокирован
 
   // const response = await axios('https://hh.ru/oauth/token', {
@@ -34,9 +35,9 @@ const apiHH = async (req, res) => {
 
   // Получение кода региона для дальнейшего использования в поиске
   // код 113 - это Россия. Если будут нужны другие страны, то нужно будет получать еще код региона перед этим
-  
+
   let areaCode = 113;
-  if (city !== 113) {
+  if (city !== 'Россия') {
     const response = await axios('https://api.hh.ru/areas/113', {
       method: 'GET',
       headers: {
@@ -47,16 +48,18 @@ const apiHH = async (req, res) => {
     });
     //console.log(response.data);
     const areasArr = response.data.areas;
-    
+
 
     for (let i = 0; i < areasArr.length; i++) {
       if (city.toUpperCase() === areasArr[i].name.toUpperCase()) {
         areaCode = areasArr[i].id;
+        city = areasArr[i].name;
         break;
       } else if (areasArr[i].areas.length > 0) {
         for (let j = 0; j < areasArr[i].areas.length; j++) {
           if (city.toUpperCase() === areasArr[i].areas[j].name.toUpperCase()) {
             areaCode = areasArr[i].areas[j].id;
+            city = areasArr[i].name;
             break;
           }
         }
@@ -70,10 +73,13 @@ const apiHH = async (req, res) => {
 
   //Получение списка вакансий по заданным параметрам
 
-  let perPage = (amount <= 100)? amount : 100;
+  let perPage = (amount <= 100) ? amount : 100;
+  let amount2 = amount;
 
   for (let page = 0; page < pages; page++) {
-    const response = await axios(`https://api.hh.ru/vacancies/?text=${title}&search_field=name&salary=${salary}&period=${period}&per_page=${perPage}&page=${page}&area=${areaCode}&order_by=publication_time`, {
+    const requestString = (salary) ? `https://api.hh.ru/vacancies/?text=${title}&search_field=name&salary=${salary}&period=${period}&per_page=${perPage}&page=${page}&area=${areaCode}&order_by=publication_time` :
+      `https://api.hh.ru/vacancies/?text=${title}&search_field=name&period=${period}&per_page=${perPage}&page=${page}&area=${areaCode}&order_by=publication_time`;
+    const response = await axios(requestString, {
       method: 'get',
       headers: {
         // 'User-Agent': 'api-test-agent',
@@ -83,8 +89,8 @@ const apiHH = async (req, res) => {
     }
     );
 
-    amount -= 100;
-    if (amount <= 100) perPage = amount;
+    amount2 -= 100;
+    if (amount2 <= 100) perPage = amount2;
 
     const vacancies = response.data.items;
 
@@ -113,7 +119,45 @@ const apiHH = async (req, res) => {
       }
     }
   }
-  return res.json(skillsObj);
+
+  // Если скилы нашлись, то запишем их в таблицу Result
+  if (Object.keys(skillsObj).length !== 0) {
+    const newResult = await Result.create({
+      search_string: title,
+      count_vacancy: amount,
+      period: period,
+      city: city,
+      salary: salary,
+      website_id: 1,
+      user_id: req.session.user.id
+    });
+    //console.log('added new result to DB ===> ',newResult);
+
+    // Если все Ок, записываем в Report
+    if (newResult) {
+      const skillsArr = [];
+      for (let key in skillsObj) {
+        //console.log({key});
+        const checkOrCreateSkill = await Skills.findOrCreate({
+          where: { skill: key },
+          defaults: {
+            skill: key,
+          },
+        });
+        //console.log('checkOrCreateSkill = ',checkOrCreateSkill);
+        skillsArr.push({
+          skill_id: checkOrCreateSkill[0].id,
+          count: skillsObj[key],
+          result_id: newResult.id          
+        });
+      }
+      //console.log(skillsArr);
+      const newReport = await Report.bulkCreate(skillsArr);
+    //console.log('added new report to DB ===> ',newReport);
+    return res.json({resultId: newResult.id});
+    }
+  }
+  return res.json({});
 };
 
 
