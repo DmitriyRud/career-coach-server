@@ -24,7 +24,7 @@ const getUserAllResult = async (req, res) => {
   const { id } = req.params;
   // id = user_id
   try {
-    const response = await Result.findAll({ where: { user_id: id }, raw: true, include: WebSite });
+    const response = await Result.findAll({ where: { user_id: id }, raw: true, include: WebSite  });
     // console.log('getUserAllResult >>>> >>>>  ', response);
     const answer = response.map((el) => {
       return (
