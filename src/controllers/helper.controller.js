@@ -1,4 +1,4 @@
-const { Result, Report, Skills, WebSite, WhiteList, BlackList, UserSkill, UserPlans } = require('../../db/models');
+const { Result, Report, Skills, WebSite, WhiteList, BlackList, UserSkill, UserPlans, BestVacancy } = require('../../db/models');
 
 const getOneResult = async (req, res) => {
   const { id } = req.params;
@@ -145,12 +145,9 @@ const getRecomendation = async (req, res) => {
 const getVacanciesUser = async (req, res) => {
   const { id } = req.params;
   console.log('getVacanciesUser id_user >>> ', id);
-  // заглушка
-  res.json([{
-    title: 'Middle/Senior JavaScript Developer (Мальта, Сент-Джулианс)',
-    company: 'Alex Staff Agency',
-    url: 'https://hh.ru/vacancy/51990194?from=vacancy_search_list&hhtmFrom=vacancy_search_list&query=Junior%20javascript',
-  }])
+  const response = await BestVacancy.findAll({where: {user_id: id}, raw: true})
+  // console.log(response);
+  res.json(response)
 }
 
 module.exports = {
