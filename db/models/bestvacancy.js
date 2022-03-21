@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   BestVacancy.init({
     user_id: DataTypes.INTEGER,
-    url: DataTypes.STRING
+    url: DataTypes.STRING,
+    job_title: DataTypes.STRING,
+    company: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'BestVacancy',
