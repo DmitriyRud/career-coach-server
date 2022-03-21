@@ -175,6 +175,8 @@ const updateUser = async (req, res) => {
   return res.sendStatus(400);
 };
 
+
+
 module.exports = {
   updateUser,
   newUserSkillSkill,

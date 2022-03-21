@@ -1,4 +1,4 @@
-const { Result, Report, Skills, WebSite, WhiteList, BlackList, UserSkill, UserPlans } = require('../../db/models');
+const { Result, Report, Skills, WebSite, WhiteList, BlackList, UserSkill, UserPlans, BestVacancy } = require('../../db/models');
 
 const getOneResult = async (req, res) => {
   const { id } = req.params;
@@ -142,6 +142,14 @@ const getRecomendation = async (req, res) => {
   res.json(['React', 'NodeJS', 'TypeScript'])
 }
 
+const getVacanciesUser = async (req, res) => {
+  const { id } = req.params;
+  console.log('getVacanciesUser id_user >>> ', id);
+  const response = await BestVacancy.findAll({where: {user_id: id}, raw: true})
+  // console.log(response);
+  res.json(response)
+}
+
 module.exports = {
   getOneResult,
   getOneReport,
@@ -150,5 +158,6 @@ module.exports = {
   addUserSkill,
   addSkillMyPlans,
   getRecomendation,
-  getUserAllResult
+  getUserAllResult,
+  getVacanciesUser
 }
