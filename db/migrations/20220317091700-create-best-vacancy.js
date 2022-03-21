@@ -18,6 +18,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      job_title: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      company: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
