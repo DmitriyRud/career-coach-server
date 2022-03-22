@@ -67,7 +67,6 @@ const newUserSkillLearn = async (req, res) => {
       },
     });
 
-    // console.log(checkOrCreateSkill[0]);
     return res.json({
       skill: checkOrCreateSkill[0].skill,
       skill_id: userSkill[0].skill_id,
@@ -81,7 +80,6 @@ const newUserSkillLearn = async (req, res) => {
 
 //Добавление скилов в таблицы "User, Skills, UserSkill" если они не добавленны
 const newUserSkillSkill = async (req, res) => {
-  // console.log("++++++++++", req.body);
   try {
     const { input, id } = req.body.skill;
     if (!input) {
@@ -96,7 +94,7 @@ const newUserSkillSkill = async (req, res) => {
 
       const skillId = checkOrCreateSkill[0].dataValues.id;
       const userSkill = await UserSkill.findOrCreate({
-        where: { user_id: id, skill_id: +skillId },
+        where: { user_id: id, skill_id: +skillId, rate: 0 },
         defaults: {
           user_id: +id,
           skill_id: +skillId,
