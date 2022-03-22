@@ -16,6 +16,7 @@ helperRouter.delete('/whitelist/:id', helperController.deleteFromWhiteList);
 helperRouter.post('/blacklist', helperController.addSkillBlackList);
 helperRouter.get('/blacklist/:id', helperController.getAllFromBlackList);
 helperRouter.delete('/blacklist/:id', helperController.deleteFromBlackList);
+helperRouter.delete('/blacklist/delete', helperController.deleteAllBlackList);
 helperRouter.post('/userskill', helperController.addUserSkill)
 helperRouter.post('/userplans', helperController.addSkillMyPlans)
 

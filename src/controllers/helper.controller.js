@@ -163,6 +163,15 @@ const deleteFromBlackList = async (req, res) => {
   }
 };
 
+const deleteAllBlackList = async (req, res) => {
+  try {
+    await BlackList.destroy({ truncate: true })
+    res.sendStatus(202);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
 const addUserSkill = async (req, res) => {
   const { skill } = req.body;
   try {
@@ -217,6 +226,7 @@ module.exports = {
   addSkillBlackList,
   getAllFromBlackList,
   deleteFromBlackList,
+  deleteAllBlackList,
   addUserSkill,
   addSkillMyPlans,
   getRecomendation,
