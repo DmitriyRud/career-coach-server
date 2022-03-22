@@ -1,4 +1,21 @@
-const { User, Skills, UserSkill, UserPlans, WhiteList, BlackList } = require("../../db/models");
+const {
+  User,
+  Skills,
+  UserSkill,
+  UserPlans,
+  WhiteList,
+  BlackList,
+} = require("../../db/models");
+
+//Check user id
+const checkUserId = async (req, res) => {
+  try {
+    const { id } = req.session.user;
+    res.json(id);
+  } catch (error) {
+    res.send({message: error})
+  }
+};
 
 //Вывод скиллов из таблицы Skills в в компонент SelectSkills
 const allSkillsForSelectSkills = async (req, res) => {
@@ -16,6 +33,7 @@ const allSkillsForSelectSkills = async (req, res) => {
 const allUserSkillsFromSkills = async (req, res) => {
   try {
     const { id } = req.params;
+    // console.log('---------S K I L L S----------',id);
     const allSkilsForSkills = await UserSkill.findAll({
       where: { user_id: +id },
       include: Skills,
@@ -32,6 +50,7 @@ const allUserSkillsFromSkills = async (req, res) => {
 const allUserSkillsFromLearn = async (req, res) => {
   try {
     const { id } = req.params;
+    // console.log('=======L E A R N====', id);
     const allSkilsForLearn = await UserPlans.findAll({
       where: { user_id: +id },
       include: Skills,
@@ -182,19 +201,38 @@ const updateUser = async (req, res) => {
 
 const getUserData = async (req, res) => {
   try {
-    const user_id = req?.session?.user?.id
+    const user_id = req?.session?.user?.id;
 
-    const responseUserSkills = await UserSkill.findAll({ where: { user_id }, raw: true , include: Skills});
-    const responseUserPlans = await UserPlans.findAll({ where: { user_id }, raw: true, include: Skills });
-    const responseWhiteList = await WhiteList.findAll({ where: { user_id }, raw: true });
-    const responseBlackList = await BlackList.findAll({ where: { user_id }, raw: true });
+    const responseUserSkills = await UserSkill.findAll({
+      where: { user_id },
+      raw: true,
+      include: Skills,
+    });
+    const responseUserPlans = await UserPlans.findAll({
+      where: { user_id },
+      raw: true,
+      include: Skills,
+    });
+    const responseWhiteList = await WhiteList.findAll({
+      where: { user_id },
+      raw: true,
+    });
+    const responseBlackList = await BlackList.findAll({
+      where: { user_id },
+      raw: true,
+    });
 
-    const data = { whiteList: responseWhiteList, blackList: responseBlackList, userSkills: responseUserSkills, myPlans: responseUserPlans };
-    res.json(data)
+    const data = {
+      whiteList: responseWhiteList,
+      blackList: responseBlackList,
+      userSkills: responseUserSkills,
+      myPlans: responseUserPlans,
+    };
+    res.json(data);
   } catch (error) {
-    res.sendStatus(500)
+    res.sendStatus(500);
   }
-}
+};
 
 module.exports = {
   updateUser,
@@ -206,4 +244,5 @@ module.exports = {
   allUserSkillsFromLearn,
   allSkillsForSelectSkills,
   getUserData,
+  checkUserId,
 };
