@@ -151,9 +151,7 @@ const deleteFromWhiteList = async (req, res) => {
 const deleteFromBlackList = async (req, res) => {
   try {
     const { userId } = req.body;
-    console.log(req.body)
     const { id } = req.params;
-    console.log(id)
     await BlackList.destroy({
       where: { id: +id, user_id: +userId },
     });
@@ -165,7 +163,18 @@ const deleteFromBlackList = async (req, res) => {
 
 const deleteAllBlackList = async (req, res) => {
   try {
-    await BlackList.destroy({ truncate: true })
+    const { userId } = req.body;
+    await BlackList.destroy({ where: {user_id: +userId} })
+    res.sendStatus(202);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+const deleteAllWhiteList = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    await WhiteList.destroy({ where: {user_id: +userId} })
     res.sendStatus(202);
   } catch (error) {
     res.sendStatus(500);
@@ -227,6 +236,7 @@ module.exports = {
   getAllFromBlackList,
   deleteFromBlackList,
   deleteAllBlackList,
+  deleteAllWhiteList,
   addUserSkill,
   addSkillMyPlans,
   getRecomendation,
