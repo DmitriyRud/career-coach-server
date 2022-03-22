@@ -13,6 +13,7 @@ const usersRouter = require('./src/routes/users.router');
 const helperRouter = require('./src/routes/helper.router');
 const userRouter = require('./src/routes/user.router');
 const apiRouter = require('./src/routes/api.router');
+const recomRouter = require('./src/routes/recom.router');
 
 
 const app = express();
@@ -57,6 +58,7 @@ app.use('/helper', helperRouter);
 app.use('/users/profile', userRouter)
 app.use('/api', apiRouter);
 app.use('/users', usersRouter);
+app.use('/recommend', recomRouter);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Start server to PORT = ${PORT}`))
