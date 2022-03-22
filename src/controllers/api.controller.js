@@ -11,12 +11,6 @@ const apiHH = async (req, res) => {
   console.log({ title, amount, period, city, salary });
   period = (period > 30) ? 30 : +period;
 
-  if (amount > 1999) amount = 1999; // Убрать эту строку, когда сделаем логику поиска более 2000 вакансий (ограничение API hh.ru)
-
-  let pages = 1;
-  if (amount > 100) {
-    pages = -~(amount / 100);
-  }
 
   //console.log({amount, pages});
 
@@ -69,17 +63,38 @@ const apiHH = async (req, res) => {
   //console.log('areaCode = ', areaCode);
 
   //return res.json(response.data);
+  
+  // Корректировка количества вакансий
+  
+  const requestAmount = await axios(`https://api.hh.ru/vacancies/?text=${title}&search_field=name&period=${period}&area=${areaCode}`, {
+    method: 'get',
+    headers: {
+      'User-Agent': 'CareerCoach (cska2004@gmail.com)',
+      'Authorization': `Bearer ${process.env.API_KEY}`,
+    },
+  }
+  );
+  
+  //console.log('найдено вакансий: ', requestAmount.data.found);
+  const vacanciesFound = await requestAmount.data.found;
 
-
-  //Получение списка вакансий по заданным параметрам
+  if (amount > vacanciesFound) amount = vacanciesFound;
+  //console.log({amount});
+  let pages = 1;
+  if (amount > 100) {
+    pages = -~(amount / 100);
+  }
 
   let perPage = (amount <= 100) ? amount : 100;
   let amount2 = amount;
 
+  //Получение списка вакансий по заданным параметрам
   for (let page = 0; page < pages; page++) {
     const requestString = (salary) ? `https://api.hh.ru/vacancies/?text=${title}&search_field=name&salary=${salary}&period=${period}&per_page=${perPage}&page=${page}&area=${areaCode}&order_by=publication_time` :
       `https://api.hh.ru/vacancies/?text=${title}&search_field=name&period=${period}&per_page=${perPage}&page=${page}&area=${areaCode}&order_by=publication_time`;
-    const response = await axios(requestString, {
+    
+    //console.log({requestString});
+      const response = await axios(requestString, {
       method: 'get',
       headers: {
         // 'User-Agent': 'api-test-agent',
@@ -92,7 +107,9 @@ const apiHH = async (req, res) => {
     amount2 -= 100;
     if (amount2 <= 100) perPage = amount2;
 
+
     const vacancies = response.data.items;
+    //console.log('vacancies =====>', vacancies);
 
     // Проход по всем найденным вакансиям для сбора информации
 
@@ -148,13 +165,13 @@ const apiHH = async (req, res) => {
         skillsArr.push({
           skill_id: checkOrCreateSkill[0].id,
           count: skillsObj[key],
-          result_id: newResult.id          
+          result_id: newResult.id
         });
       }
-      //console.log(skillsArr);
+     // console.log(skillsArr);
       const newReport = await Report.bulkCreate(skillsArr);
-    //console.log('added new report to DB ===> ',newReport);
-    return res.json({resultId: newResult.id});
+      //console.log('added new report to DB ===> ',newReport);
+      return res.json({ resultId: newResult.id });
     }
   }
   return res.json({});
