@@ -5,7 +5,7 @@ const allSkillsForSelectSkills = async (req, res) => {
   console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   try {
     const allSkills = await Skills.findAll();
-    console.log("++++++++++++++", allSkills);
+    // console.log("++++++++++++++", allSkills);
     res.json(allSkills);
   } catch (error) {
     res.sendStatus(418);
@@ -58,10 +58,6 @@ const newUserSkillLearn = async (req, res) => {
       },
     });
 
-    // if (checkOrCreateSkill) {
-    //   const response = await Skills;
-    // }
-
     const skillId = checkOrCreateSkill[0].dataValues.id;
     const userSkill = await UserPlans.findOrCreate({
       where: { user_id: id, skill_id: +skillId },
@@ -72,7 +68,12 @@ const newUserSkillLearn = async (req, res) => {
     });
 
     // console.log(checkOrCreateSkill[0]);
-    return res.json(checkOrCreateSkill[0]);
+    return res.json({
+      skill: checkOrCreateSkill[0].skill,
+      skill_id: userSkill[0].skill_id,
+      user_id: userSkill[0].user_id,
+      category: "learn",
+    });
   } catch (error) {
     res.sendStatus(418);
   }
@@ -80,7 +81,7 @@ const newUserSkillLearn = async (req, res) => {
 
 //Добавление скилов в таблицы "User, Skills, UserSkill" если они не добавленны
 const newUserSkillSkill = async (req, res) => {
-  console.log("++++++++++", req.body);
+  // console.log("++++++++++", req.body);
   try {
     const { input, id } = req.body.skill;
     if (!input) {
@@ -101,8 +102,14 @@ const newUserSkillSkill = async (req, res) => {
           skill_id: +skillId,
         },
       });
-      console.log(checkOrCreateSkill[0]);
-      return res.json(checkOrCreateSkill[0]);
+      console.log(userSkill);
+      // console.log(checkOrCreateSkill[0]);
+      return res.json({
+        skill: checkOrCreateSkill[0].skill,
+        skill_id: userSkill[0].skill_id,
+        user_id: userSkill[0].user_id,
+        category: "skills",
+      });
     }
   } catch (error) {
     res.send(error);
@@ -174,8 +181,6 @@ const updateUser = async (req, res) => {
 
   return res.sendStatus(400);
 };
-
-
 
 module.exports = {
   updateUser,
