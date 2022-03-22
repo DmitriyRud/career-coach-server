@@ -4,7 +4,7 @@ require('dotenv').config();
 
 
 const apiHH = async (req, res) => {
-  let { title, amount, period, city = 'Россия', salary, websites } = req.body;
+  let { title, amount = 1, period = 1, city = 'Россия', salary, websites } = req.body;
   const skillsObj = {};
 
 
