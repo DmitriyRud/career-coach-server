@@ -1,11 +1,11 @@
-const { User, Skills, UserSkill, UserPlans } = require("../../db/models");
+const { User, Skills, UserSkill, UserPlans, WhiteList, BlackList } = require("../../db/models");
 
 //Вывод скиллов из таблицы Skills в в компонент SelectSkills
 const allSkillsForSelectSkills = async (req, res) => {
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+  // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   try {
     const allSkills = await Skills.findAll();
-    console.log("++++++++++++++", allSkills);
+    // console.log("++++++++++++++", allSkills);
     res.json(allSkills);
   } catch (error) {
     res.sendStatus(418);
@@ -175,7 +175,30 @@ const updateUser = async (req, res) => {
   return res.sendStatus(400);
 };
 
-
+const getUserData = async (req, res) => {
+  try {
+    const user_id = req?.session?.user?.id
+    // console.log('getUserData START');
+    // console.log(user_id);
+    // if(user_id) {
+    //   res.sendStatus(200)
+    // }
+    // UserSkill, UserPlans, WhiteList, BlackList
+    const responseUserSkills = await UserSkill.findAll({ where: { user_id }, raw: true , include: Skills});
+    const responseUserPlans = await UserPlans.findAll({ where: { user_id }, raw: true, include: Skills });
+    const responseWhiteList = await WhiteList.findAll({ where: { user_id }, raw: true });
+    const responseBlackList = await BlackList.findAll({ where: { user_id }, raw: true });
+    // console.log('responseUserSkills >>>>', responseUserSkills);
+    // console.log('responseUserPlans >>>>', responseUserPlans);
+    // console.log('responseWhiteList >>>>', responseWhiteList);
+    // console.log('responseBlackList >>>>', responseBlackList);
+    const data = { whiteList: responseWhiteList, blackList: responseBlackList, userSkills: responseUserSkills, myPlans: responseUserPlans };
+    // console.log('DATA >>>>', data);
+    res.json(data)
+  } catch (error) {
+    res.sendStatus(500)
+  }
+}
 
 module.exports = {
   updateUser,
@@ -186,4 +209,5 @@ module.exports = {
   allUserSkillsFromSkills,
   allUserSkillsFromLearn,
   allSkillsForSelectSkills,
+  getUserData,
 };
