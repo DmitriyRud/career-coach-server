@@ -168,7 +168,7 @@ const apiHH = async (req, res) => {
           result_id: newResult.id
         });
       }
-      //console.log(skillsArr);
+     // console.log(skillsArr);
       const newReport = await Report.bulkCreate(skillsArr);
       //console.log('added new report to DB ===> ',newReport);
       return res.json({ resultId: newResult.id });
