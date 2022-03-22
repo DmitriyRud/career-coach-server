@@ -215,7 +215,7 @@ const getRecomendation = async (req, res) => {
   // TODO сделать логику по рекомендациям, использовать текущие скилы пользователя
 
   // заглушка, пока нет логики для сбора массива
-  res.json(['React', 'NodeJS', 'TypeScript'])
+  // res.json(['React', 'NodeJS', 'TypeScript'])
 }
 
 const getVacanciesUser = async (req, res) => {
