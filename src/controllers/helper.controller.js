@@ -40,7 +40,7 @@ const getUserAllResult = async (req, res) => {
         }
       )
     });
-      // console.log(answer);
+      //console.log('answer ======>', answer);
     return res.json(answer)
   } catch (error) {
     return res.sendStatus(500)

@@ -58,10 +58,6 @@ const newUserSkillLearn = async (req, res) => {
       },
     });
 
-    // if (checkOrCreateSkill) {
-    //   const response = await Skills;
-    // }
-
     const skillId = checkOrCreateSkill[0].dataValues.id;
     const userSkill = await UserPlans.findOrCreate({
       where: { user_id: id, skill_id: +skillId },
@@ -72,7 +68,12 @@ const newUserSkillLearn = async (req, res) => {
     });
 
     // console.log(checkOrCreateSkill[0]);
-    return res.json(checkOrCreateSkill[0]);
+    return res.json({
+      skill: checkOrCreateSkill[0].skill,
+      skill_id: userSkill[0].skill_id,
+      user_id: userSkill[0].user_id,
+      category: "learn",
+    });
   } catch (error) {
     res.sendStatus(418);
   }
@@ -80,7 +81,7 @@ const newUserSkillLearn = async (req, res) => {
 
 //Добавление скилов в таблицы "User, Skills, UserSkill" если они не добавленны
 const newUserSkillSkill = async (req, res) => {
-  console.log("++++++++++", req.body);
+  // console.log("++++++++++", req.body);
   try {
     const { input, id } = req.body.skill;
     if (!input) {
@@ -101,8 +102,14 @@ const newUserSkillSkill = async (req, res) => {
           skill_id: +skillId,
         },
       });
-      console.log(checkOrCreateSkill[0]);
-      return res.json(checkOrCreateSkill[0]);
+      console.log(userSkill);
+      // console.log(checkOrCreateSkill[0]);
+      return res.json({
+        skill: checkOrCreateSkill[0].skill,
+        skill_id: userSkill[0].skill_id,
+        user_id: userSkill[0].user_id,
+        category: "skills",
+      });
     }
   } catch (error) {
     res.send(error);
@@ -178,22 +185,13 @@ const updateUser = async (req, res) => {
 const getUserData = async (req, res) => {
   try {
     const user_id = req?.session?.user?.id
-    // console.log('getUserData START');
-    // console.log(user_id);
-    // if(user_id) {
-    //   res.sendStatus(200)
-    // }
-    // UserSkill, UserPlans, WhiteList, BlackList
+
     const responseUserSkills = await UserSkill.findAll({ where: { user_id }, raw: true , include: Skills});
     const responseUserPlans = await UserPlans.findAll({ where: { user_id }, raw: true, include: Skills });
     const responseWhiteList = await WhiteList.findAll({ where: { user_id }, raw: true });
     const responseBlackList = await BlackList.findAll({ where: { user_id }, raw: true });
-    // console.log('responseUserSkills >>>>', responseUserSkills);
-    // console.log('responseUserPlans >>>>', responseUserPlans);
-    // console.log('responseWhiteList >>>>', responseWhiteList);
-    // console.log('responseBlackList >>>>', responseBlackList);
+
     const data = { whiteList: responseWhiteList, blackList: responseBlackList, userSkills: responseUserSkills, myPlans: responseUserPlans };
-    // console.log('DATA >>>>', data);
     res.json(data)
   } catch (error) {
     res.sendStatus(500)
