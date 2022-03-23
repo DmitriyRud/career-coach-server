@@ -21,8 +21,10 @@ const getOneResult = async (req, res) => {
 }
 
 const getUserAllResult = async (req, res) => {
-  const { id } = req.params;
-  // id = user_id
+  let { id } = req.params;
+  if(id === 'undefined') {
+    id = req?.session?.user?.id
+  }
   try {
     const response = await Result.findAll({ where: { user_id: id }, raw: true, include: WebSite  });
     // console.log('getUserAllResult >>>> >>>>  ', response);
@@ -105,6 +107,82 @@ const addSkillBlackList = async (req, res) => {
   }
 }
 
+const getAllFromWhiteList = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const allItemsFromWhiteList = await WhiteList.findAll({
+      where: { user_id: +id },
+      // include: Skills,
+      // order: [["createdAt", "DESC"]],
+    });
+    return res.json(allItemsFromWhiteList);
+  } catch (error) {
+    res.sendStatus(418);
+  }
+}  
+
+const getAllFromBlackList = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const allItemsFromBlackList = await BlackList.findAll({
+      where: { user_id: +id },
+      // include: Skills,
+      // order: [["createdAt", "DESC"]],
+    });
+    return res.json(allItemsFromBlackList);
+  } catch (error) {
+    res.sendStatus(418);
+  }
+}  
+
+const deleteFromWhiteList = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    console.log(req.body)
+    const { id } = req.params;
+    console.log(id)
+    await WhiteList.destroy({
+      where: { id: +id, user_id: +userId },
+    });
+    res.sendStatus(202);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+const deleteFromBlackList = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const { id } = req.params;
+    await BlackList.destroy({
+      where: { id: +id, user_id: +userId },
+    });
+    res.sendStatus(202);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+const deleteAllBlackList = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    await BlackList.destroy({ where: {user_id: +userId} })
+    res.sendStatus(202);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+const deleteAllWhiteList = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    await WhiteList.destroy({ where: {user_id: +userId} })
+    res.sendStatus(202);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
 const addUserSkill = async (req, res) => {
   const { skill } = req.body;
   try {
@@ -154,7 +232,13 @@ module.exports = {
   getOneResult,
   getOneReport,
   addSkillWhiteList,
+  getAllFromWhiteList,
+  deleteFromWhiteList,
   addSkillBlackList,
+  getAllFromBlackList,
+  deleteFromBlackList,
+  deleteAllBlackList,
+  deleteAllWhiteList,
   addUserSkill,
   addSkillMyPlans,
   getRecomendation,

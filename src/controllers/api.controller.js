@@ -1,16 +1,28 @@
-const { Result, Report, Skills } = require('../../db/models');
+const { Result, Report, Skills, UserSkill } = require('../../db/models');
 const axios = require('axios');
+const { allUserSkillsFromSkills } = require('./user.controller');
 require('dotenv').config();
 
 
 const apiHH = async (req, res) => {
-  let { title, amount = 1, period = 1, city = 'Россия', salary, websites } = req.body;
+  let { userId, title, amount = 1, period = 1, city = 'Россия', salary, websites } = req.body;
   const skillsObj = {};
 
 
-  console.log({ title, amount, period, city, salary });
+  console.log({ userId, title, amount, period, city, salary });
   period = (period > 30) ? 30 : +period;
 
+  let bestVacansiesArr = [];
+
+  const userSkills = await UserSkill.findAll({
+      where: { user_id: +userId },
+      include: Skills,
+      order: [["createdAt", "DESC"]],
+    });
+  //console.log('userSkills = ', userSkills[0].Skill.skill);
+  
+
+  //const userSkills = allUserSkillsFromSkills(userId);
 
   //console.log({amount, pages});
 
