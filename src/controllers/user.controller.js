@@ -12,12 +12,14 @@ const newRate = async (req, res) => {
   const { user_id, skill_id, value } = req.body;
   await UserSkill.update(
     {
-      rate: value,
+      rate: value * 2,
     },
     {
       where: { user_id, skill_id },
     }
   );
+  const data = await UserSkill.findOne({ where: { user_id, skill_id } });
+  res.json(data);
 };
 
 //Check user id
