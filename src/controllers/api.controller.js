@@ -177,7 +177,7 @@ const apiHH = async (req, res) => {
       bestVacsObj.company = vacancies[i].employer.name;
       let salaryStr = ''
       if (!vacancies[i].salary) {
-        salaryStr = 'З/п не указана';
+        salaryStr = 'зтзь/п не указана';
       } else {
         if (vacancies[i].salary?.from) {
           salaryStr = (vacancies[i].salary?.to !== undefined && vacancies[i].salary?.to !== null) ? 'от ' + vacancies[i].salary?.from + ' до ' + vacancies[i].salary?.to + ' ' : vacancies[i].salary?.from + ' ';
