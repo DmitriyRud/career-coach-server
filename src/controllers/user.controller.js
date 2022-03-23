@@ -9,8 +9,16 @@ const {
 
 //Update Rate(stars)
 const newRate = async (req, res) => {
-  console.log('R == E == Q', req.body);
-}
+  const { user_id, skill_id, value } = req.body;
+  await UserSkill.update(
+    {
+      rate: value,
+    },
+    {
+      where: { user_id, skill_id },
+    }
+  );
+};
 
 //Check user id
 const checkUserId = async (req, res) => {
@@ -18,7 +26,7 @@ const checkUserId = async (req, res) => {
     const { id } = req.session.user;
     res.json(id);
   } catch (error) {
-    res.send({message: error})
+    res.send({ message: error });
   }
 };
 

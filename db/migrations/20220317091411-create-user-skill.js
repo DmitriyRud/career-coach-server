@@ -21,7 +21,7 @@ module.exports = {
         onDelete: "CASCADE",
       },
       rate: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,
