@@ -1,10 +1,14 @@
 const userRouter = require('express').Router()
+const { user } = require('pg/lib/defaults')
 const userController = require('../controllers/user.controller')
 
 //Вывод скилов из Skills  в компонент SelectSkills
 userRouter.get('/allskillsforskillsselect', userController.allSkillsForSelectSkills )
 
+//Update rate for skills
+userRouter.put('/changerate',userController.newRate)
 
+//----------------------------------------------------
 userRouter.get('/checkuserid', userController.checkUserId )
 
 
