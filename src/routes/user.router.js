@@ -5,6 +5,9 @@ const userController = require('../controllers/user.controller')
 userRouter.get('/allskillsforskillsselect', userController.allSkillsForSelectSkills )
 
 
+userRouter.get('/checkuserid', userController.checkUserId )
+
+
 
 //ДЛя learn 
 userRouter.post('/adduserskilllearn', userController.newUserSkillLearn )
