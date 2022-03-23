@@ -7,6 +7,11 @@ const {
   BlackList,
 } = require("../../db/models");
 
+//Update Rate(stars)
+const newRate = async (req, res) => {
+  console.log('R == E == Q', req.body);
+}
+
 //Check user id
 const checkUserId = async (req, res) => {
   try {
@@ -39,7 +44,7 @@ const allUserSkillsFromSkills = async (req, res) => {
       include: Skills,
       order: [["createdAt", "DESC"]],
     });
-
+    // console.log(allSkilsForSkills);
     return res.json(allSkilsForSkills);
   } catch (error) {
     res.sendStatus(418);
@@ -245,4 +250,5 @@ module.exports = {
   allSkillsForSelectSkills,
   getUserData,
   checkUserId,
+  newRate,
 };
