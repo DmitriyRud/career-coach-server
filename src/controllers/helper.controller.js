@@ -21,8 +21,10 @@ const getOneResult = async (req, res) => {
 }
 
 const getUserAllResult = async (req, res) => {
-  const { id } = req.params;
-  // id = user_id
+  let { id } = req.params;
+  if(id === 'undefined') {
+    id = req?.session?.user?.id
+  }
   try {
     const response = await Result.findAll({ where: { user_id: id }, raw: true, include: WebSite  });
     // console.log('getUserAllResult >>>> >>>>  ', response);
