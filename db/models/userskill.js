@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   UserSkill.init({
     user_id: DataTypes.INTEGER,
     skill_id: DataTypes.INTEGER,
-    rate: DataTypes.INTEGER
+    rate: DataTypes.FLOAT,
   }, {
     sequelize,
     modelName: 'UserSkill',
