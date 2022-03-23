@@ -13,6 +13,7 @@ const usersRouter = require('./src/routes/users.router');
 const helperRouter = require('./src/routes/helper.router');
 const userRouter = require('./src/routes/user.router');
 const apiRouter = require('./src/routes/api.router');
+const scrapRouter = require('./src/routes/scrap.router');
 const recomRouter = require('./src/routes/recom.router');
 const vacansiesRouter = require('./src/routes/vacansies.router');
 
@@ -58,6 +59,7 @@ app.use('/auth', authRouter);
 app.use('/helper', helperRouter);
 app.use('/users/profile', userRouter)
 app.use('/api', apiRouter);
+app.use('/scrap', scrapRouter);
 app.use('/users', usersRouter);
 app.use('/recommend', recomRouter);
 app.use('/bestvacansies', vacansiesRouter);
