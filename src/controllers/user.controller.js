@@ -19,6 +19,8 @@ const newRate = async (req, res) => {
     }
   );
   const data = await UserSkill.findOne({ where: { user_id, skill_id } });
+  // console.log('======D A T A=======',{...data, rate: data.rate / 2});
+  // console.log('=========FJIFJDFJDFJFDJDFJ++++',data.rate,data.user_id, data.skill_id, data);
   res.json(data);
 };
 
