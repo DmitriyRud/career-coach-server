@@ -19,7 +19,7 @@ const apiHH = async (req, res) => {
       include: Skills,
       order: [["createdAt", "DESC"]],
     });
-  console.log('userSkills = ', userSkills[0].Skill.skill);
+  //console.log('userSkills = ', userSkills[0].Skill.skill);
   
 
   //const userSkills = allUserSkillsFromSkills(userId);
