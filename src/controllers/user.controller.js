@@ -7,13 +7,30 @@ const {
   BlackList,
 } = require("../../db/models");
 
+//Update Rate(stars)
+const newRate = async (req, res) => {
+  const { user_id, skill_id, value } = req.body;
+  await UserSkill.update(
+    {
+      rate: value * 2,
+    },
+    {
+      where: { user_id, skill_id },
+    }
+  );
+  const data = await UserSkill.findOne({ where: { user_id, skill_id } });
+  // console.log('======D A T A=======',{...data, rate: data.rate / 2});
+  // console.log('=========FJIFJDFJDFJFDJDFJ++++',data.rate,data.user_id, data.skill_id, data);
+  res.json(data);
+};
+
 //Check user id
 const checkUserId = async (req, res) => {
   try {
     const { id } = req.session.user;
     res.json(id);
   } catch (error) {
-    res.send({message: error})
+    res.send({ message: error });
   }
 };
 
@@ -39,7 +56,7 @@ const allUserSkillsFromSkills = async (req, res) => {
       include: Skills,
       order: [["createdAt", "DESC"]],
     });
-
+    // console.log(allSkilsForSkills);
     return res.json(allSkilsForSkills);
   } catch (error) {
     res.sendStatus(418);
@@ -245,4 +262,5 @@ module.exports = {
   allSkillsForSelectSkills,
   getUserData,
   checkUserId,
+  newRate,
 };
