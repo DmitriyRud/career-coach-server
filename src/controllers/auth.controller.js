@@ -68,7 +68,7 @@ const checkAuth = async (req, res) => {
 const checkIfLoggedIn = async (req, res) => {
   if (req.session.user.id) {
     const currentUser = await User.findByPk(req.session.user.id);
-    return res.json({ id: currentUser.id, name: currentUser.name, email: currentUser.email, fio: currentUser.fio, avatar: currentUser.avatar });
+    return res.json({ id: currentUser?.id, name: currentUser?.name, email: currentUser?.email, fio: currentUser?.fio, avatar: currentUser?.avatar });
   } else {
     return res.json({});
   }
