@@ -19,8 +19,6 @@ const newRate = async (req, res) => {
     }
   );
   const data = await UserSkill.findOne({ where: { user_id, skill_id } });
-  // console.log('======D A T A=======',{...data, rate: data.rate / 2});
-  // console.log('=========FJIFJDFJDFJFDJDFJ++++',data.rate,data.user_id, data.skill_id, data);
   res.json(data);
 };
 
@@ -36,10 +34,8 @@ const checkUserId = async (req, res) => {
 
 //Вывод скиллов из таблицы Skills в в компонент SelectSkills
 const allSkillsForSelectSkills = async (req, res) => {
-  // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   try {
     const allSkills = await Skills.findAll();
-    // console.log("++++++++++++++", allSkills);
     res.json(allSkills);
   } catch (error) {
     res.sendStatus(418);
@@ -50,13 +46,11 @@ const allSkillsForSelectSkills = async (req, res) => {
 const allUserSkillsFromSkills = async (req, res) => {
   try {
     const { id } = req.params;
-    // console.log('---------S K I L L S----------',id);
     const allSkilsForSkills = await UserSkill.findAll({
       where: { user_id: +id },
       include: Skills,
       order: [["createdAt", "DESC"]],
     });
-    // console.log(allSkilsForSkills);
     return res.json(allSkilsForSkills);
   } catch (error) {
     res.sendStatus(418);
@@ -67,7 +61,6 @@ const allUserSkillsFromSkills = async (req, res) => {
 const allUserSkillsFromLearn = async (req, res) => {
   try {
     const { id } = req.params;
-    // console.log('=======L E A R N====', id);
     const allSkilsForLearn = await UserPlans.findAll({
       where: { user_id: +id },
       include: Skills,
@@ -136,8 +129,6 @@ const newUserSkillSkill = async (req, res) => {
           skill_id: +skillId,
         },
       });
-      console.log(userSkill);
-      // console.log(checkOrCreateSkill[0]);
       return res.json({
         skill: checkOrCreateSkill[0].skill,
         skill_id: userSkill[0].skill_id,
