@@ -18,7 +18,7 @@ async function startBrowser(){
 	try {
 	    console.log("Opening the browser......");
 	    browser = await puppeteer.launch({
-          executablePath: '/usr/bin/google-chrome-stable',
+          executablePath: process.env.PATH_TO_BROWSER,
 	        headless: false,
 	        args: ["--disable-setuid-sandbox"],
 	        'ignoreHTTPSErrors': true
