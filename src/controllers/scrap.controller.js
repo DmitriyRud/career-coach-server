@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const browserObject = require('../scrapper/browser');
 const scraperController = require('../scrapper/pageController');
+const { Skills, UserSkill } = require('../../db/models');
 
 const scrapHH = async (req, res) => {
   let { userId, title, amount = 1, period = 1, city = 'Россия', salary, websites } = req.body;
@@ -30,6 +31,7 @@ const scrapHH = async (req, res) => {
   let browserInstance = browserObject.startBrowser();
 
     const params = {
+    userId,
     title,
     amount,
     period,
@@ -37,11 +39,12 @@ const scrapHH = async (req, res) => {
     salary,
     websites
   };
-  await scraperController(browserInstance, params);
+  const resultId = await scraperController(browserInstance, params);
 
+  console.log('resultId ===== ', resultId);
 
   
-  return res.json({});
+  return res.json({resultId});
 };
 
 
